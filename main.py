@@ -1,33 +1,33 @@
 from typing import Optional
 
 from fastapi import FastAPI
+
 import random  # randomライブラリを追加
 
-question_text = "ドラえもんは西暦何年からやってきたでしょう？"
-correct_answer = os.getenv("CORRECT_ANSWER", "")
+app = FastAPI()
 
 
-@app.get("/quiz")
-async def quiz():
-    return {"question": question_text}
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
 
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Optional[str] = None):
+    return {"item_id": item_id, "q": q}
 
-@app.get("/quiz")
-async def quiz_answer(answer: str):
-    # 結果を格納するためのリストを作成します
-    result = []
-    all_correct = True  # すべて正解かどうかを示すフラグ
+@app.get("/omikuji")
+def omikuji():
+    omikuji_list = [
+        "大吉",
+        "中吉",
+        "小吉",
+        "吉",
+        "半吉",
+        "末吉",
+        "末小吉",
+        "凶",
+        "小凶",
+        "大凶"
+    ]
 
-    # ユーザーの答えと正解の答えを比較します
-    for i in range(len(correct_answer)):
-        if i < len(answer) and answer[i] == correct_answer[i]:
-            # 一致する文字はそのまま追加します
-            result.append(answer[i])
-        else:
-            # 一致しない部分は '?' を追加する
-            result.append("?")
-            all_correct = False
-
-    result_str = "".join(result)
-
-    return {"result": result_str, "all_correct": all_correct, "question": question_text}
+    return omikuji_list[random.randrange(10)]
