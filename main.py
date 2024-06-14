@@ -1,6 +1,21 @@
 from fastapi.responses import HTMLResponse #インポート
+from typing import Optional
 
-### コードいろいろ... ###
+from fastapi import FastAPI
+
+import random  # randomライブラリを追加
+
+app = FastAPI()
+
+
+@app.get("/")
+async def root():
+    return {"message": "Hello World"}
+
+@app.get("/items/{item_id}")
+def read_item(item_id: int, q: Optional[str] = None):
+    return {"item_id": item_id, "q": q}
+
 
 @app.get("/index")
 def index():
